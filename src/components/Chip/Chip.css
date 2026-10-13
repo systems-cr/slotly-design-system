@@ -1,0 +1,27 @@
+.slotly-chip {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 var(--space-inset-sm);
+  border: 0;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background-color: var(--bg-default);
+  /* Figma draws the stroke inside the frame, so it doesn't add to the chip's size. */
+  box-shadow: inset 0 0 0 1px var(--border-default);
+  color: var(--text-primary);
+  font-family: var(--typography-label-font-family);
+  font-weight: var(--typography-label-font-weight);
+  font-size: var(--typography-label-font-size);
+  line-height: var(--typography-label-line-height);
+  letter-spacing: var(--typography-label-letter-spacing);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.slotly-chip--selected {
+  background-color: var(--bg-selected);
+  box-shadow: none;
+  color: var(--text-selected);
+}
