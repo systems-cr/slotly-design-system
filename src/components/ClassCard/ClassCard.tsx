@@ -2,7 +2,7 @@ import type { HTMLAttributes, MouseEventHandler } from 'react';
 import { Button } from '../Button/Button';
 import './ClassCard.css';
 
-export type ClassCardStatusTone = 'warning' | 'error' | 'success';
+export type ClassCardStatusTone = 'warning' | 'error' | 'success' | 'info';
 
 export interface ClassCardProps extends HTMLAttributes<HTMLElement> {
   /** Figma text property "Class name". */
@@ -16,6 +16,7 @@ export interface ClassCardProps extends HTMLAttributes<HTMLElement> {
   /**
    * Status tag colour. Not a Figma property: the component uses feedback/warning, and the
    * Reference screen overrides it to feedback/error ("Full") and feedback/success ("Booked").
+   * "info" uses text/secondary, for statuses that are purely information (see DESIGN.md).
    */
   statusTone?: ClassCardStatusTone;
   /** Label of the nested Button (its "Label" property, overridden per card on the Reference screen). */
