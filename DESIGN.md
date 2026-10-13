@@ -55,7 +55,7 @@ Each colour role has one job. Pick a role by what you're colouring, not by the c
 | Role | Use it for |
 |---|---|
 | `text/primary` | Most text: headings, class names, prices, chip labels. |
-| `text/secondary` | Supporting text that should step back: dates, times and studios, unselected nav labels. |
+| `text/secondary` | Supporting text that should step back: dates, times and studios, unselected nav labels. Also the colour of an info status (see [Status](#status)). |
 | `text/selected` | Text in a selected chip or nav item. |
 | `text/on-primary` | Text on top of the primary action colour, i.e. button labels. |
 
@@ -231,7 +231,7 @@ A status tells people what state something is in, when that state changes what t
 Every status has two parts:
 
 - **The words** say what the state is. They carry the meaning.
-- **The colour** (one of the three feedback roles) shows at a glance how much it matters. It backs up the words and never replaces them.
+- **The colour** shows at a glance how much it matters: a feedback role, or `text/secondary` for an info status. It backs up the words and never replaces them.
 
 **The test:** cover up the colour, or look at the screen in greyscale. If the status still makes complete sense, it's right. Plenty of people only ever get the words:
 - people who can't tell red from green
@@ -247,10 +247,13 @@ Choose the tone by what the status *means for the person*, not by how the word s
 | **Success** | `feedback/success` | It's done or confirmed in their favour. Nothing more is needed. | "Booked" |
 | **Warning** | `feedback/warning` | They can still do it, but there's something they should know or act on soon. | "Few spots left" |
 | **Error** | `feedback/error` | They're blocked. The usual action isn't possible, so they need another route. | "Full" |
+| **Info** | `text/secondary` | Something worth knowing that doesn't block them and doesn't need attention. | No approved status yet |
 
 For example, "Full" is an error even though nothing has gone wrong. The person can't book, so the button offers another route: "Join waitlist".
 
-There's no neutral tone for a status that's just information. Don't fake one with `text/secondary`, because it would look like supporting text rather than a status. If you need one, ask for it to be designed.
+Use the info tone only when the status is purely information. If it limits what the person can do, or asks them to act soon, it's an error or a warning, not info.
+
+An info status is the same colour as ordinary supporting text, such as the time and studio line. So the colour doesn't mark it out as a status; the words and its place on the card have to. Write it as a clear state, like any other status.
 
 ### Approved statuses
 
@@ -258,13 +261,13 @@ Use these exact words. The same situation must read the same way on every screen
 
 | Situation | Status text | Tone | Button label |
 |---|---|---|---|
-| Spots available, but only a few left | "Few spots left" | Warning | "Book" |
+| 5 or fewer spots left (but at least 1) | "Few spots left" | Warning | "Book" |
 | No spots left | "Full" | Error | "Join waitlist" |
 | The person has already booked this class | "Booked" | Success | "View booking" |
 
 The status says the **state**, and the button says the **action**. They must always agree. A "Full" class never shows "Book", and a "Booked" class never shows "Book" again.
 
-How few spots count as "few" isn't defined yet. Agree the number with the product team rather than guessing.
+**"Few" means 5 or fewer spots left.** Show "Few spots left" from 5 spots down to 1. At 0, the class is "Full". With 6 or more spots, "Few spots left" isn't true, so don't show it.
 
 ### Writing a status
 
@@ -285,14 +288,14 @@ How few spots count as "few" isn't defined yet. Agree the number with the produc
 | "Booked" | "Your booking has been confirmed." | It's too long, has a full stop, and wraps. |
 | "Booked" in `feedback/success` | A green dot or ✓ with no word | Colour or a symbol alone means nothing to many people. |
 | "Few spots left" in `feedback/warning` | "Few spots left" in `feedback/error` | It's the wrong tone: booking is still possible. |
-| "Full" in `feedback/error` | "Full" in `text/secondary` | Without its tone, it reads like ordinary supporting text. |
+| "Full" in `feedback/error` | "Full" in `text/secondary` | That's the info tone, but a full class blocks booking, so it's an error. |
 
 ### How a status looks
 
-- **Caption text, coloured with the feedback role for its tone.** That's the whole style.
+- **Caption text, in the colour for its tone:** `feedback/success`, `feedback/warning`, `feedback/error`, or `text/secondary` for info. That's the whole style.
 - **Plain coloured text only:** no background, pill, border or icon. The system has no background colours for status, so a coloured badge would have to be designed first.
 - **Feedback colours are only for status.** Don't use them for prices, links, headings or decoration. If colour is used loosely, people stop trusting what it means.
-- **All three colours are readable as text on white,** each about 5:1: success and warning 5.02:1, error 4.83:1. Never use `amber/500` for a status, at 2.15:1.
+- **All four colours are readable as text on white,** each about 5:1: success and warning 5.02:1, error and info 4.83:1. Never use `amber/500` for a status, at 2.15:1.
 
 ### Where a status goes
 
@@ -310,14 +313,14 @@ Before using any status that isn't in the approved table:
 5. **Add it to Figma and to the approved table here, then use it.** Never invent a status in a single screen or in code.
 
 Statuses that will probably be needed but aren't designed yet:
-- a class with plenty of spots: show no status, or a neutral one?
+- a class with 6 or more spots: show no status, or an info status? If it's an info status, its words need agreeing first.
 - "On waitlist", after someone joins the waitlist
 - a cancelled class
 - a class that has already started or finished
 
 Ask before designing any of these.
 
-**In code:** the class card takes the words as `statusTag` and the tone as `statusTone` (`"warning"`, `"error"` or `"success"`). Always set both together, from the approved table. `statusTone` defaults to `"warning"`, so if you leave it out, the status quietly shows in amber.
+**In code:** the class card takes the words as `statusTag` and the tone as `statusTone` (`"warning"`, `"error"` or `"success"`). Always set both together, from the approved table. `statusTone` defaults to `"warning"`, so if you leave it out, the status quietly shows in amber. The coded class card doesn't support the info tone yet. It needs an `"info"` value before an info status can be built.
 
 ---
 
@@ -339,10 +342,10 @@ The screen's background is `bg/default`. Content lines up with the screen edges 
 Every new screen must follow these, whether a designer or an AI is building it. They're short on purpose, so they can be checked one by one.
 
 1. **Use the four components as they are.** Don't detach, restyle or recreate them. Don't build new components out of plain shapes.
-2. **Colour only with Semantic variables,** and pick the role by what you're colouring: `bg/` for surfaces, `text/` for text, `icon/` for icons, `border/` for lines, `action/` for buttons, `feedback/` for status. Never use a Primitive, a hex code or a colour picked by eye.
+2. **Colour only with Semantic variables,** and pick the role by what you're colouring: `bg/` for surfaces, `text/` for text, `icon/` for icons, `border/` for lines, `action/` for buttons, `feedback/` for status (or `text/secondary` for an info status). Never use a Primitive, a hex code or a colour picked by eye.
 3. **Use only the five text styles.** No other font, size or weight.
 4. **Use only the spacing and radius roles.** Gap between things, inset inside things. No in-between values.
-5. **Every status uses words and colour together:** an approved status text, in the feedback colour for its tone. The words must make sense without the colour. Use feedback colours for nothing else. See [Status](#status).
+5. **Every status uses words and colour together:** an approved status text, in the colour for its tone (a feedback role, or `text/secondary` for info). The words must make sense without the colour. Use feedback colours for nothing else. See [Status](#status).
 6. **Show state with the component's own states.** Selected for the current chip or section, Default for the rest. Never invent a state by changing colours by hand.
 7. **Exactly one Nav item is Selected,** and exactly one Chip in a filter row.
 8. **Use one Button per card,** with the label that goes with the card's status (see [Approved statuses](#approved-statuses)).
@@ -373,7 +376,7 @@ These are known gaps. If a screen needs one, ask for it to be designed in Figma 
 - **A secondary or less prominent button, and disabled or loading buttons.**
 - **Chip behaviour beyond single selection,** and a hover state for chips.
 - **Class photos in the card.**
-- **Statuses other than "Few spots left", "Full" and "Booked",** a neutral status tone, and the number of spots that counts as "few". See [Adding a new status](#adding-a-new-status).
+- **Statuses other than "Few spots left", "Full" and "Booked",** including the first info status, and the info tone in the coded class card. See [Adding a new status](#adding-a-new-status).
 - **Empty, loading and error states for screens.**
 - **Header and bottom-nav bar components.** They're built from frames on the Reference screen, not as reusable components.
 - **A visible keyboard focus style.** Code currently uses the browser's default focus ring.
