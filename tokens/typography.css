@@ -1,0 +1,37 @@
+/* Generated from the Figma text styles. Do not edit by hand. */
+:root {
+  /* Heading */
+  --typography-heading-font-family: "Inter", sans-serif;
+  --typography-heading-font-weight: 600;
+  --typography-heading-font-size: 24px;
+  --typography-heading-line-height: normal;
+  --typography-heading-letter-spacing: 0;
+
+  /* Title */
+  --typography-title-font-family: "Inter", sans-serif;
+  --typography-title-font-weight: 600;
+  --typography-title-font-size: 20px;
+  --typography-title-line-height: normal;
+  --typography-title-letter-spacing: 0;
+
+  /* Body */
+  --typography-body-font-family: "Inter", sans-serif;
+  --typography-body-font-weight: 400;
+  --typography-body-font-size: 16px;
+  --typography-body-line-height: normal;
+  --typography-body-letter-spacing: 0;
+
+  /* Label */
+  --typography-label-font-family: "Inter", sans-serif;
+  --typography-label-font-weight: 600;
+  --typography-label-font-size: 14px;
+  --typography-label-line-height: normal;
+  --typography-label-letter-spacing: 0;
+
+  /* Caption */
+  --typography-caption-font-family: "Inter", sans-serif;
+  --typography-caption-font-weight: 400;
+  --typography-caption-font-size: 12px;
+  --typography-caption-line-height: normal;
+  --typography-caption-letter-spacing: 0;
+}
