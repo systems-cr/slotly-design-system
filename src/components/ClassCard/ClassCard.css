@@ -76,3 +76,7 @@
 .slotly-class-card__status--success {
   color: var(--feedback-success);
 }
+
+.slotly-class-card__status--info {
+  color: var(--text-secondary);
+}

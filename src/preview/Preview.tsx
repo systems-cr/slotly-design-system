@@ -65,6 +65,16 @@ export function Preview() {
       </Section>
 
       <Section title="Class card">
+        <Example props='statusTone="info"'>
+          <ClassCard
+            name="Evening Vinyasa"
+            timeAndStudio="7:30 PM · Lotus Studio"
+            price="₹450"
+            statusTag="Spots available"
+            statusTone="info"
+            buttonLabel="Book"
+          />
+        </Example>
         <Example props='statusTone="warning"'>
           <ClassCard
             name="Morning Yoga Flow"

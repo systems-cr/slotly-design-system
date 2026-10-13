@@ -224,7 +224,7 @@ There are four components. Use them as they are: don't detach them, restyle them
 
 ## Status
 
-A status tells people what state something is in, when that state changes what they can do next. On Slotly today, statuses appear in one place: the status tag on the class card ("Few spots left", "Full", "Booked").
+A status tells people what state something is in, such as whether they can still book a class. On Slotly today, statuses appear in one place: the status tag on the class card ("Spots available", "Few spots left", "Full", "Booked").
 
 ### Words and colour: a status needs both
 
@@ -247,13 +247,13 @@ Choose the tone by what the status *means for the person*, not by how the word s
 | **Success** | `feedback/success` | It's done or confirmed in their favour. Nothing more is needed. | "Booked" |
 | **Warning** | `feedback/warning` | They can still do it, but there's something they should know or act on soon. | "Few spots left" |
 | **Error** | `feedback/error` | They're blocked. The usual action isn't possible, so they need another route. | "Full" |
-| **Info** | `text/secondary` | Something worth knowing that doesn't block them and doesn't need attention. | No approved status yet |
+| **Info** | `text/secondary` | Something worth knowing that doesn't block them and doesn't need attention. | "Spots available" |
 
 For example, "Full" is an error even though nothing has gone wrong. The person can't book, so the button offers another route: "Join waitlist".
 
 Use the info tone only when the status is purely information. If it limits what the person can do, or asks them to act soon, it's an error or a warning, not info.
 
-An info status is the same colour as ordinary supporting text, such as the time and studio line. So the colour doesn't mark it out as a status; the words and its place on the card have to. Write it as a clear state, like any other status.
+An info status is the same colour as ordinary supporting text, such as the time and studio line. So the colour doesn't mark it out as a status; the words and its place on the card have to. Write it as a clear state, like any other status. "Spots available" works because it plainly states the class's state, in the status line after the price.
 
 ### Approved statuses
 
@@ -261,13 +261,20 @@ Use these exact words. The same situation must read the same way on every screen
 
 | Situation | Status text | Tone | Button label |
 |---|---|---|---|
+| 6 or more spots left | "Spots available" | Info | "Book" |
 | 5 or fewer spots left (but at least 1) | "Few spots left" | Warning | "Book" |
 | No spots left | "Full" | Error | "Join waitlist" |
 | The person has already booked this class | "Booked" | Success | "View booking" |
 
 The status says the **state**, and the button says the **action**. They must always agree. A "Full" class never shows "Book", and a "Booked" class never shows "Book" again.
 
-**"Few" means 5 or fewer spots left.** Show "Few spots left" from 5 spots down to 1. At 0, the class is "Full". With 6 or more spots, "Few spots left" isn't true, so don't show it.
+**Every class shows exactly one of these statuses:**
+- **6 or more spots:** "Spots available".
+- **5 down to 1 spot:** "Few spots left" ("few" means 5 or fewer).
+- **0 spots:** "Full".
+- **If the person has booked the class:** "Booked", whatever the number of spots.
+
+"Spots available" deliberately doesn't give a number. A count changes all the time and would make "Few spots left" look vague beside it.
 
 ### Writing a status
 
@@ -289,6 +296,8 @@ The status says the **state**, and the button says the **action**. They must alw
 | "Booked" in `feedback/success` | A green dot or ✓ with no word | Colour or a symbol alone means nothing to many people. |
 | "Few spots left" in `feedback/warning` | "Few spots left" in `feedback/error` | It's the wrong tone: booking is still possible. |
 | "Full" in `feedback/error` | "Full" in `text/secondary` | That's the info tone, but a full class blocks booking, so it's an error. |
+| "Spots available" in `text/secondary` | "Spots available" in `feedback/success` | It's information, not a confirmation. Green suggests something is already done, like "Booked". |
+| "Spots available" | "12 spots left" | It isn't the approved wording, and a changing count makes "Few spots left" look vague beside it. |
 
 ### How a status looks
 
@@ -313,14 +322,13 @@ Before using any status that isn't in the approved table:
 5. **Add it to Figma and to the approved table here, then use it.** Never invent a status in a single screen or in code.
 
 Statuses that will probably be needed but aren't designed yet:
-- a class with 6 or more spots: show no status, or an info status? If it's an info status, its words need agreeing first.
 - "On waitlist", after someone joins the waitlist
 - a cancelled class
 - a class that has already started or finished
 
 Ask before designing any of these.
 
-**In code:** the class card takes the words as `statusTag` and the tone as `statusTone` (`"warning"`, `"error"` or `"success"`). Always set both together, from the approved table. `statusTone` defaults to `"warning"`, so if you leave it out, the status quietly shows in amber. The coded class card doesn't support the info tone yet. It needs an `"info"` value before an info status can be built.
+**In code:** the class card takes the words as `statusTag` and the tone as `statusTone` (`"info"`, `"warning"`, `"error"` or `"success"`). Always set both together, from the approved table. `statusTone` defaults to `"warning"`, so if you leave it out, the status quietly shows in amber.
 
 ---
 
@@ -358,7 +366,7 @@ Every new screen must follow these, whether a designer or an AI is building it. 
   - **Button:** `state` (`"default"` / `"hover"`) and `label`.
   - **Chip:** `state` (`"default"` / `"selected"`) and `label`.
   - **NavItem:** `state` (`"default"` / `"selected"`), `icon` and `label`.
-  - **ClassCard:** `name`, `timeAndStudio`, `price`, `statusTag`, `statusTone` (`"warning"` / `"error"` / `"success"`) and `buttonLabel`. Set `statusTag`, `statusTone` and `buttonLabel` together, from one row of the approved statuses table.
+  - **ClassCard:** `name`, `timeAndStudio`, `price`, `statusTag`, `statusTone` (`"info"` / `"warning"` / `"error"` / `"success"`) and `buttonLabel`. Set `statusTag`, `statusTone` and `buttonLabel` together, from one row of the approved statuses table.
 - **Don't pass `state="hover"` in a real screen.** It exists for previews and documentation; real hover is automatic.
 - **In CSS, refer to variables by their CSS names.** A Figma name becomes a CSS name by replacing `/` with `-` and adding `--` (`text/secondary` → `var(--text-secondary)`). Text styles are `--typography-{style}-{property}`, for example `var(--typography-body-font-size)`.
 - **Never use the Primitive variables in `tokens/tokens.css`** (the first block in the file), and never write colours, font sizes or spacing as raw values.
@@ -376,7 +384,8 @@ These are known gaps. If a screen needs one, ask for it to be designed in Figma 
 - **A secondary or less prominent button, and disabled or loading buttons.**
 - **Chip behaviour beyond single selection,** and a hover state for chips.
 - **Class photos in the card.**
-- **Statuses other than "Few spots left", "Full" and "Booked",** including the first info status, and the info tone in the coded class card. See [Adding a new status](#adding-a-new-status).
+- **Statuses beyond the approved four,** such as "On waitlist" or a cancelled class. See [Adding a new status](#adding-a-new-status).
+- **A "Spots available" example in Figma.** It's approved here and built in code, but the Reference page doesn't show it yet.
 - **Empty, loading and error states for screens.**
 - **Header and bottom-nav bar components.** They're built from frames on the Reference screen, not as reusable components.
 - **A visible keyboard focus style.** Code currently uses the browser's default focus ring.
