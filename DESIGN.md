@@ -81,7 +81,7 @@ Each colour role has one job. Pick a role by what you're colouring, not by the c
 | `feedback/warning` | Something needs attention soon. On the class card: "Few spots left". |
 | `feedback/error` | Something is blocked or failed. On the class card: "Full". |
 
-Feedback colours are only for status messages. Don't use them to decorate, or to colour a button or background.
+Feedback colours are only for status messages. Don't use them to decorate, or to colour a button or background. A status always needs words as well as colour: see [Status](#status) for choosing the tone and writing the words.
 
 **Contrast.** Every text and icon role passes the WCAG AA contrast minimum (4.5:1) on the backgrounds it's meant for.
 - **`text/secondary` on `bg/subtle` passes by a hair (4.51:1).** Don't put it on anything darker.
@@ -190,20 +190,10 @@ There are four components. Use them as they are: don't detach them, restyle them
 2. **Class name:** Title style. For example, "Morning Yoga Flow".
 3. **Time and studio:** Body style, `text/secondary`. For example, "6:30 AM · Lotus Studio".
 4. **Price:** Body style. For example, "₹450".
-5. **Status tag:** Caption style, in a feedback colour.
+5. **Status tag:** how full the class is, or whether the person has booked it. See [Status](#status).
 6. **Button:** the action.
 
-**Status and action go together.** Pick the row that matches the class, and use its tag, colour and button label together:
-
-| Situation | Status tag | Colour | Button label |
-|---|---|---|---|
-| Spots available, but few left | "Few spots left" | `feedback/warning` | "Book" |
-| No spots left | "Full" | `feedback/error` | "Join waitlist" |
-| The person has already booked | "Booked" | `feedback/success` | "View booking" |
-
-The status text must say the status in words. Colour backs it up but is never the only signal.
-
-The design doesn't yet cover a class with plenty of spots, a cancelled class, or a class that has already started. Ask before inventing a tag or hiding it.
+**The status and the button go together.** Use only the approved statuses, each with its own button label, from [Status](#status).
 
 **Rules**
 - **Stack cards vertically** with `space/gap-lg` between them, inside a list area coloured `bg/subtle` with `space/inset-md` padding.
@@ -232,6 +222,105 @@ The design doesn't yet cover a class with plenty of spots, a cancelled class, or
 
 ---
 
+## Status
+
+A status tells people what state something is in, when that state changes what they can do next. On Slotly today, statuses appear in one place: the status tag on the class card ("Few spots left", "Full", "Booked").
+
+### Words and colour: a status needs both
+
+Every status has two parts:
+
+- **The words** say what the state is. They carry the meaning.
+- **The colour** (one of the three feedback roles) shows at a glance how much it matters. It backs up the words and never replaces them.
+
+**The test:** cover up the colour, or look at the screen in greyscale. If the status still makes complete sense, it's right. Plenty of people only ever get the words:
+- people who can't tell red from green
+- people using a screen reader, which reads the words aloud but never the colour
+- anyone glancing at their phone in bright sunlight
+
+### Choosing the tone
+
+Choose the tone by what the status *means for the person*, not by how the word sounds.
+
+| Tone | Colour | What it means for the person | Example |
+|---|---|---|---|
+| **Success** | `feedback/success` | It's done or confirmed in their favour. Nothing more is needed. | "Booked" |
+| **Warning** | `feedback/warning` | They can still do it, but there's something they should know or act on soon. | "Few spots left" |
+| **Error** | `feedback/error` | They're blocked. The usual action isn't possible, so they need another route. | "Full" |
+
+For example, "Full" is an error even though nothing has gone wrong. The person can't book, so the button offers another route: "Join waitlist".
+
+There's no neutral tone for a status that's just information. Don't fake one with `text/secondary`, because it would look like supporting text rather than a status. If you need one, ask for it to be designed.
+
+### Approved statuses
+
+Use these exact words. The same situation must read the same way on every screen, so don't paraphrase: not "Sold out" for "Full", not "Confirmed" for "Booked".
+
+| Situation | Status text | Tone | Button label |
+|---|---|---|---|
+| Spots available, but only a few left | "Few spots left" | Warning | "Book" |
+| No spots left | "Full" | Error | "Join waitlist" |
+| The person has already booked this class | "Booked" | Success | "View booking" |
+
+The status says the **state**, and the button says the **action**. They must always agree. A "Full" class never shows "Book", and a "Booked" class never shows "Book" again.
+
+How few spots count as "few" isn't defined yet. Agree the number with the product team rather than guessing.
+
+### Writing a status
+
+- **Describe the state from the person's point of view.** "Booked" means *you* have booked this class.
+- **Keep it short:** one to three words, on one line. It's small Caption text and must never wrap onto a second line.
+- **Use plain, everyday words.** No internal terms ("Capacity reached"), codes or abbreviations.
+- **Use sentence case, with no full stop and no exclamation mark.** Write "Few spots left", not "Few Spots Left!".
+- **Use words, not symbols.** Never use an emoji, tick, dot or icon instead of the words.
+- **State the fact; don't pressure or alarm.** "Few spots left", not "Hurry!" or "Last chance!".
+- **Don't repeat the button.** The status is the state ("Full"); the action belongs on the button ("Join waitlist").
+- **Don't squeeze other details in.** Price, time and studio have their own lines on the card.
+- **Only show a status that's true right now.** A status that's out of date is worse than none.
+
+| Do | Don't | Why |
+|---|---|---|
+| "Full" | "Sold out!" | It isn't the approved word, and the exclamation mark adds alarm. |
+| "Few spots left" | "Hurry, almost gone" | It's pressure, not a fact. |
+| "Booked" | "Your booking has been confirmed." | It's too long, has a full stop, and wraps. |
+| "Booked" in `feedback/success` | A green dot or ✓ with no word | Colour or a symbol alone means nothing to many people. |
+| "Few spots left" in `feedback/warning` | "Few spots left" in `feedback/error` | It's the wrong tone: booking is still possible. |
+| "Full" in `feedback/error` | "Full" in `text/secondary` | Without its tone, it reads like ordinary supporting text. |
+
+### How a status looks
+
+- **Caption text, coloured with the feedback role for its tone.** That's the whole style.
+- **Plain coloured text only:** no background, pill, border or icon. The system has no background colours for status, so a coloured badge would have to be designed first.
+- **Feedback colours are only for status.** Don't use them for prices, links, headings or decoration. If colour is used loosely, people stop trusting what it means.
+- **All three colours are readable as text on white,** each about 5:1: success and warning 5.02:1, error 4.83:1. Never use `amber/500` for a status, at 2.15:1.
+
+### Where a status goes
+
+- **One status per class card,** in its fixed place: after the price, before the button.
+- **Status tags only appear on the class card today.** If another screen needs a status, such as a booking details page, use the same words, tone and style, and agree it in Figma first.
+
+### Adding a new status
+
+Before using any status that isn't in the approved table:
+
+1. **Check it's really a state.** It shouldn't be an action ("Book now") or a marketing message ("Popular!").
+2. **Pick the tone** by what it means for the person, using the tone table above.
+3. **Write the words** using the writing rules.
+4. **Decide which button goes with it.**
+5. **Add it to Figma and to the approved table here, then use it.** Never invent a status in a single screen or in code.
+
+Statuses that will probably be needed but aren't designed yet:
+- a class with plenty of spots: show no status, or a neutral one?
+- "On waitlist", after someone joins the waitlist
+- a cancelled class
+- a class that has already started or finished
+
+Ask before designing any of these.
+
+**In code:** the class card takes the words as `statusTag` and the tone as `statusTone` (`"warning"`, `"error"` or `"success"`). Always set both together, from the approved table. `statusTone` defaults to `"warning"`, so if you leave it out, the status quietly shows in amber.
+
+---
+
 ## Building a screen
 
 The class list on the Reference page is the model for a Slotly screen. It's a phone screen 390 wide. From top to bottom:
@@ -253,10 +342,10 @@ Every new screen must follow these, whether a designer or an AI is building it. 
 2. **Colour only with Semantic variables,** and pick the role by what you're colouring: `bg/` for surfaces, `text/` for text, `icon/` for icons, `border/` for lines, `action/` for buttons, `feedback/` for status. Never use a Primitive, a hex code or a colour picked by eye.
 3. **Use only the five text styles.** No other font, size or weight.
 4. **Use only the spacing and radius roles.** Gap between things, inset inside things. No in-between values.
-5. **Use status colours only for status,** and always say the status in words too.
+5. **Every status uses words and colour together:** an approved status text, in the feedback colour for its tone. The words must make sense without the colour. Use feedback colours for nothing else. See [Status](#status).
 6. **Show state with the component's own states.** Selected for the current chip or section, Default for the rest. Never invent a state by changing colours by hand.
 7. **Exactly one Nav item is Selected,** and exactly one Chip in a filter row.
-8. **Use one Button per card,** with a label that matches the card's status (see the class card table).
+8. **Use one Button per card,** with the label that goes with the card's status (see [Approved statuses](#approved-statuses)).
 9. **Keep text readable.** Don't place text on a background its role wasn't meant for, and never use `amber/500` for text.
 10. **If the system doesn't have what you need, stop and ask.** Name the gap (for example, "a secondary button" or "an empty state"). Don't improvise a one-off. New tokens and components are added in Figma first and then come to this repository. They're never invented in a screen or in code.
 
@@ -266,7 +355,7 @@ Every new screen must follow these, whether a designer or an AI is building it. 
   - **Button:** `state` (`"default"` / `"hover"`) and `label`.
   - **Chip:** `state` (`"default"` / `"selected"`) and `label`.
   - **NavItem:** `state` (`"default"` / `"selected"`), `icon` and `label`.
-  - **ClassCard:** `name`, `timeAndStudio`, `price`, `statusTag`, `statusTone` (`"warning"` / `"error"` / `"success"`) and `buttonLabel`.
+  - **ClassCard:** `name`, `timeAndStudio`, `price`, `statusTag`, `statusTone` (`"warning"` / `"error"` / `"success"`) and `buttonLabel`. Set `statusTag`, `statusTone` and `buttonLabel` together, from one row of the approved statuses table.
 - **Don't pass `state="hover"` in a real screen.** It exists for previews and documentation; real hover is automatic.
 - **In CSS, refer to variables by their CSS names.** A Figma name becomes a CSS name by replacing `/` with `-` and adding `--` (`text/secondary` → `var(--text-secondary)`). Text styles are `--typography-{style}-{property}`, for example `var(--typography-body-font-size)`.
 - **Never use the Primitive variables in `tokens/tokens.css`** (the first block in the file), and never write colours, font sizes or spacing as raw values.
@@ -283,7 +372,8 @@ These are known gaps. If a screen needs one, ask for it to be designed in Figma 
 
 - **A secondary or less prominent button, and disabled or loading buttons.**
 - **Chip behaviour beyond single selection,** and a hover state for chips.
-- **Class photos in the card,** and statuses other than "Few spots left", "Full" and "Booked".
+- **Class photos in the card.**
+- **Statuses other than "Few spots left", "Full" and "Booked",** a neutral status tone, and the number of spots that counts as "few". See [Adding a new status](#adding-a-new-status).
 - **Empty, loading and error states for screens.**
 - **Header and bottom-nav bar components.** They're built from frames on the Reference screen, not as reusable components.
 - **A visible keyboard focus style.** Code currently uses the browser's default focus ring.
