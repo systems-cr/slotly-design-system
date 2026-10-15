@@ -7,7 +7,7 @@ This guide is for anyone building a new Slotly screen: designers in Figma, devel
 ## Where things live
 
 - **Figma is the source of truth.** Everything here comes from the [Slotly DS – Tokens (Lib)](https://www.figma.com/design/aC4DTl4rU1vQL66WMlq0o9/Slotly-DS---Tokens--Lib-?node-id=2-2) file:
-  - **Reference page:** the components, and an example screen (the class list) that shows them in use.
+  - **Reference page:** the components; an example screen (the class list) that shows them in use; and a Status Examples frame, with one class card for each approved status.
   - **Token spec page:** what every colour, spacing and radius value is for.
 - **This repository is generated from Figma.** It holds the tokens, typography, icons and coded components. Change Figma first, then update the repository to match. Never the other way round.
 
@@ -224,7 +224,7 @@ There are four components. Use them as they are: don't detach them, restyle them
 
 ## Status
 
-A status tells people what state something is in, such as whether they can still book a class. On Slotly today, statuses appear in one place: the status tag on the class card ("Spots available", "Few spots left", "Full", "Booked").
+A status tells people what state something is in, such as whether they can still book a class. On Slotly today, statuses appear in one place: the status tag on the class card ("Spots available", "Few spots left", "Full", "Booked", "Attended"). Each one is shown in the Status Examples frame on the Figma Reference page.
 
 ### Words and colour: a status needs both
 
@@ -247,13 +247,13 @@ Choose the tone by what the status *means for the person*, not by how the word s
 | **Success** | `feedback/success` | It's done or confirmed in their favour. Nothing more is needed. | "Booked" |
 | **Warning** | `feedback/warning` | They can still do it, but there's something they should know or act on soon. | "Few spots left" |
 | **Error** | `feedback/error` | They're blocked. The usual action isn't possible, so they need another route. | "Full" |
-| **Info** | `text/secondary` | Something worth knowing that doesn't block them and doesn't need attention. | "Spots available" |
+| **Info** | `text/secondary` | Something worth knowing that doesn't block them and doesn't need attention. | "Spots available", "Attended" |
 
 For example, "Full" is an error even though nothing has gone wrong. The person can't book, so the button offers another route: "Join waitlist".
 
 Use the info tone only when the status is purely information. If it limits what the person can do, or asks them to act soon, it's an error or a warning, not info.
 
-An info status is the same colour as ordinary supporting text, such as the time and studio line. So the colour doesn't mark it out as a status; the words and its place on the card have to. Write it as a clear state, like any other status. "Spots available" works because it plainly states the class's state, in the status line after the price.
+An info status is the same colour as ordinary supporting text, such as the time and studio line. So the colour doesn't mark it out as a status; the words and its place on the card have to. Write it as a clear state, like any other status. "Spots available" and "Attended" work because they plainly state the class's state, in the status line after the price.
 
 ### Approved statuses
 
@@ -265,6 +265,7 @@ Use these exact words. The same situation must read the same way on every screen
 | 5 or fewer spots left (but at least 1) | "Few spots left" | Warning | "Book" |
 | No spots left | "Full" | Error | "Join waitlist" |
 | The person has already booked this class | "Booked" | Success | "View booking" |
+| The person booked this class, it has finished and they attended | "Attended" | Info | "Book again" |
 
 The status says the **state**, and the button says the **action**. They must always agree. A "Full" class never shows "Book", and a "Booked" class never shows "Book" again.
 
@@ -272,7 +273,10 @@ The status says the **state**, and the button says the **action**. They must alw
 - **6 or more spots:** "Spots available".
 - **5 down to 1 spot:** "Few spots left" ("few" means 5 or fewer).
 - **0 spots:** "Full".
-- **If the person has booked the class:** "Booked", whatever the number of spots.
+- **If the person has booked the class:** "Booked", whatever the number of spots, until the class finishes.
+- **After the class, if the person booked and attended it:** "Attended".
+
+"Attended" is info, not success. The booking was the confirmation; now the class is simply over. The button offers the natural next step: "Book again".
 
 "Spots available" deliberately doesn't give a number. A count changes all the time and would make "Few spots left" look vague beside it.
 
@@ -324,7 +328,9 @@ Before using any status that isn't in the approved table:
 Statuses that will probably be needed but aren't designed yet:
 - "On waitlist", after someone joins the waitlist
 - a cancelled class
-- a class that has already started or finished
+- a class that has started but not finished
+- a finished class the person booked but didn't attend
+- a finished class the person never booked
 
 Ask before designing any of these.
 
@@ -385,7 +391,6 @@ These are known gaps. If a screen needs one, ask for it to be designed in Figma 
 - **Chip behaviour beyond single selection,** and a hover state for chips.
 - **Class photos in the card.**
 - **Statuses beyond the approved four,** such as "On waitlist" or a cancelled class. See [Adding a new status](#adding-a-new-status).
-- **A "Spots available" example in Figma.** It's approved here and built in code, but the Reference page doesn't show it yet.
 - **Empty, loading and error states for screens.**
 - **Header and bottom-nav bar components.** They're built from frames on the Reference screen, not as reusable components.
 - **A visible keyboard focus style.** Code currently uses the browser's default focus ring.
