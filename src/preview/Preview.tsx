@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Button, Chip, ClassCard, NavItem, type IconName } from '../index';
+import { Button, Chip, ClassCard, NavItem, type ClassCardStatusTone, type IconName } from '../index';
 import './preview.css';
 
 const navItems: { icon: IconName; label: string }[] = [
@@ -7,6 +7,15 @@ const navItems: { icon: IconName; label: string }[] = [
   { icon: 'classes', label: 'Classes' },
   { icon: 'bookings', label: 'Bookings' },
   { icon: 'profile', label: 'Profile' },
+];
+
+// The approved statuses, in the order of the Status Examples frame on the Figma Reference page.
+const classStatuses: { statusTag: string; statusTone: ClassCardStatusTone; buttonLabel: string }[] = [
+  { statusTag: 'Few spots left', statusTone: 'warning', buttonLabel: 'Book' },
+  { statusTag: 'Full', statusTone: 'error', buttonLabel: 'Join waitlist' },
+  { statusTag: 'Spots available', statusTone: 'info', buttonLabel: 'Book' },
+  { statusTag: 'Booked', statusTone: 'success', buttonLabel: 'View booking' },
+  { statusTag: 'Attended', statusTone: 'info', buttonLabel: 'Book again' },
 ];
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -65,46 +74,14 @@ export function Preview() {
       </Section>
 
       <Section title="Class card">
-        <Example props='statusTone="info"'>
-          <ClassCard
-            name="Evening Vinyasa"
-            timeAndStudio="7:30 PM · Lotus Studio"
-            price="₹450"
-            statusTag="Spots available"
-            statusTone="info"
-            buttonLabel="Book"
-          />
-        </Example>
-        <Example props='statusTone="warning"'>
-          <ClassCard
-            name="Morning Yoga Flow"
-            timeAndStudio="6:30 AM · Lotus Studio"
-            price="₹450"
-            statusTag="Few spots left"
-            statusTone="warning"
-            buttonLabel="Book"
-          />
-        </Example>
-        <Example props='statusTone="error"'>
-          <ClassCard
-            name="HIIT Express"
-            timeAndStudio="7:15 AM · Pulse Gym"
-            price="₹600"
-            statusTag="Full"
-            statusTone="error"
-            buttonLabel="Join waitlist"
-          />
-        </Example>
-        <Example props='statusTone="success"'>
-          <ClassCard
-            name="Core Pilates"
-            timeAndStudio="6:00 PM · Align Studio"
-            price="₹550"
-            statusTag="Booked"
-            statusTone="success"
-            buttonLabel="View booking"
-          />
-        </Example>
+        {classStatuses.map((status) => (
+          <Example
+            key={status.statusTag}
+            props={`statusTag="${status.statusTag}" statusTone="${status.statusTone}" buttonLabel="${status.buttonLabel}"`}
+          >
+            <ClassCard name="Morning Yoga Flow" timeAndStudio="6:30 AM · Lotus Studio" price="₹450" {...status} />
+          </Example>
+        ))}
       </Section>
     </main>
   );
